@@ -10,6 +10,6 @@ The implementation uses **TensorFlow**.
 
 The full solution is provided in the [Traffic_Sign_Classifier.ipynb](Traffic_Sign_Classifier.ipynb) notebook.
 
-An HTMl version of the notebook: [Traffic_Sign_Classifier.html](Traffic_Sign_Classifier.html).
+An HTML version of the notebook: [Traffic_Sign_Classifier.html](Traffic_Sign_Classifier.html).
 
 The writeup accompanying the notebook: .
