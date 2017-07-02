@@ -48,10 +48,14 @@ The goals / steps of this project are the following:
 
 #### Loading the data
 
+[download the dataset](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/5898cd6f_traffic-signs-data/traffic-signs-data.zip)
+
 Unzip the data and load it with pickle, there are 3 files to load:
 
 train.p
+
 valid.p
+
 test.p
 
 
