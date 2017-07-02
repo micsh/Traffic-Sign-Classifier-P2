@@ -107,9 +107,11 @@ Looking at the distribution of the various categories, it's clear that not all c
 I have started with a simple approach, using the LeNet model and only normalizing the input from [0..255] to [0..1].
 
 ##### I have decided to see how far I can go with just the model, and no data augmentation or pre-processing.
-The thinking here is to be able to better understand how well does the model learn. The quality of the data-set is obviously paramount for allowing the learning to happen, but I wanted to start with a benchmark, and therefore no helping the model! 
-From the point of view of a data scientist, having a good toolset for data augmentation is invaluable to solve a given task. We would also very much like to be able to learn from a few examples as possible (they are expensive), and data augmentation is one (mechanical) way to achieve that.
-But I wanted to start with the simplest implementation and work from there; turns out we can get a pretty good score, even without data augmentation.
+The thinking here is to be able to better understand how well does the model learn. The quality of the data-set is obviously paramount for allowing the learning to happen, but I wanted to start with a benchmark, and therefore no helping the model.
+
+From the point of view of a data scientist, having a good toolset for data augmentation is invaluable to solve a given task. We would also, very much like, to be able to learn from a few examples as possible (they are expensive), and data augmentation is one (mechanical) way to achieve that. But I believe the answer lies with reinforcemnt learning and continuous learning and not data augmentation.
+
+Anyway, I wanted to start with the simplest implementation and work from there; turns out we can get a pretty good score, even without data augmentation.
 
 ##### My final model has the following layers:
 
@@ -129,13 +131,13 @@ But I wanted to start with the simplest implementation and work from there; turn
  
 
 
-#### To train the model, I used the Adam optimizer with a learning rate of 0.0009, batch size of 256 for 55 epochs.
+##### To train the model, I used the Adam optimizer with a learning rate of 0.0009, batch size of 256 for 55 epochs.
 * I have removed the bias terms from the model.
 * I have increased the batch size, thinking it might help the model get a big enough sample to get good gradients, after all, there are 43 different categories to classify and they aren't distributed uniformly.
 * I have not used early stopping (the validation accuracy peaked 98% on epoch 39).
 * I am using dropout, after both fully-connected layers, to help the model generalize and not overfit.
 
-#### My final model results are:
+##### My final model results are:
 * validation set accuracy of 97.1%
 * test set accuracy of 95.4%
 
@@ -143,28 +145,38 @@ I have decided to start from the LeNet model, partially because it was readily a
 
 I have played my own gradient descent, and tweaked the learning rate, batch size, layers, activations, and more, to see what works, and what doesn't.
 
-### Test a Model on New Images
+#### Test a Model on New Images
 
-#### I have searched the web for traffic sign images, and found the following 10 images:
+##### I have searched the web for traffic sign images, and found the following 10 images:
 
 ![road work][rw1] ![road work][rw2] ![60][60] ![general caution][gc] ![priority road][pr]
 ![no entry][ne] ![stop][st1] ![stop][st2] ![aright of way][rn] ![yield][y]
 
-#### Here are the results of the prediction:
+Not all images are the same size and shape, so we will have to resize them for the model.
+
+```python
+img = cv2.imread(os.path.join('Images from the web', name))
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+img = cv2.resize(img, (32, 32))
+```
+
+##### Here are the results of the prediction:
 
 ![web results][wresults]
 
-The model only gets wrong the 'general caution' sign and mistakes it to 'no passing'.
+The model only gets wrong the 'general caution' sign and mistakes it to 'no passing'. Pretty amazing!
 
-The model was able to correctly guess 9 of the 10 traffic signs, which gives an accuracy of 90%. 
+The model was able to correctly guess 9 of the 10 traffic signs, which gives an accuracy of 90%. So that's pretty close to the model's score.
 
-#### Looking at the softmax values to asses how certain the model is
+##### Looking at the softmax values to asses how certain the model is
 
 ![web results pred][wresultsp]
 
-The model is pretty confident about all of them (lowest proababily goes to the stop sign), but gets one of them wrong. This a very small sample, so we should take the accuracy on them with a grain of salt.
+The model is pretty confident about all of them (lowest proababily goes to the stop sign), but gets one of them wrong. This is a little worrying ? 
 
-### Visualizing the Neural Network 
+This a very small sample, so we should take the accuracy on them with a grain of salt.
+
+#### Visualizing the Neural Network 
 
 One of the visualizations that helped me (with tweaking the model too) was the activation of the first layer. Here's an example:
 
@@ -175,3 +187,9 @@ input image:
 first layer activation:
 
 ![visualization][visualization]
+
+Looking at these activations, we can maybe relate the problem space to the importance of a good first layer. And we can probably have a very good first layer if the subsequent layers are good at generalizing.
+
+#### Summary
+
+This was a fun exercise, and I liked the simplicity/reduced-noise in this implementation. It helps to see what components are needed to get a pretty good accuracy.
